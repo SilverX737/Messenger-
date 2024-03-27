@@ -28,7 +28,7 @@ public class Messenger extends JFrame {
         userPanel.setLayout(new GridLayout(0, 1));
         userPanel.setBackground(Color.LIGHT_GRAY);
 
-        String[] users = {"User 1", "User 2", "User 3", "User 4", "User 5"};
+        String[] users = { "User 1", "User 2", "User 3", "User 4", "User 5" };
         conversations = new HashMap<>();
         for (String user : users) {
             JButton userButton = new JButton(user);
@@ -69,23 +69,32 @@ public class Messenger extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Sends a message to the selected user.
+     * When the user clicks the "Send" button, the sendMessage() method is called.
+     */
     private void sendMessage() {
-      String message = messageTextArea.getText();
-      StringBuilder conversation = conversations.getOrDefault(selectedUser, new StringBuilder());
-      conversation.append("You: ").append(message).append("\n"); // Append the message with a newline
-      conversationTextArea.append(conversation.toString()); // Append the updated conversation to the text area
-      messageTextArea.setText("");
-  
-      try {
-          // Create a new client instance for the selected user and send the message
-          Client client = new Client(SERVER_ADDRESS, SERVER_PORT);
-          client.sendMessage(message);
-          client.close();
-      } catch (IOException e) {
-          e.printStackTrace();
-      }
-  }
-  
+        String message = messageTextArea.getText();
+        StringBuilder conversation = conversations.getOrDefault(selectedUser, new StringBuilder());
+        conversation.append("You: ").append(message).append("\n"); // Append the message with a newline
+        conversationTextArea.append(conversation.toString()); // Append the updated conversation to the text area
+        messageTextArea.setText("");
+
+        try {
+            // Create a new client instance for the selected user and send the message
+            Client client = new Client(SERVER_ADDRESS, SERVER_PORT);
+            client.sendMessage(message);
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * ActionListener for user buttons.
+     * When a user button is clicked, the listener updates the selected user and
+     * updates the conversation displayed in the conversation text area.
+     */
 
     private class UserButtonListener implements ActionListener {
         private String user;
@@ -101,6 +110,19 @@ public class Messenger extends JFrame {
         }
     }
 
+    /**
+     * Updates the conversation text area based on the selected user.
+     * 
+     * @param user The selected user
+     * 
+     *             The updateConversation() method updates the conversation text
+     *             area based on the selected user.
+     * 
+     *             It retrieves the conversation for the selected user from the
+     *             conversations map and sets it as the text for the conversation
+     *             text area.
+     */
+
     private void updateConversation(String user) {
         StringBuilder conversation = conversations.getOrDefault(user, new StringBuilder());
         conversationTextArea.setText(conversation.toString());
@@ -114,5 +136,3 @@ public class Messenger extends JFrame {
         });
     }
 }
-
-
